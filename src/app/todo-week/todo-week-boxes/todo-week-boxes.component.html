@@ -1,0 +1,50 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th
+        scope="col"
+        *ngFor="let thItem of hoursData"
+        [ngClass]="thItem.className"
+      >
+        {{ thItem.title }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let trItem of daysData" [ngClass]="trItem.classNameTr">
+      <th [ngClass]="trItem.className" scope="row">{{ trItem.title }}</th>
+      <ng-container *ngFor="let hrItem of hoursData; let i = index">
+        <!-- რახან hoursData მასივში 0 ინდექსზე WeekDays თაითლი გვაქვს ამიტომაც
+        ეს ობიქტი ამოვაგდოთ და ასევე ყოველ კლიკზე თან გავაყოლოთ ამ უჯრის დრო და დღე.
+       -->
+        <td
+          *ngIf="i != 0"
+          (click)="openDialog(trItem.title, hrItem.title)"
+          [ngClass]="hrItem.className"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+          [attr.day]="trItem.title"
+          [attr.hour]="hrItem.title"
+        >
+          <!-- აქ უშუალოდ ვწერ უჯრაში -->
+          <ng-container *ngFor="let item of dialog.todoData">
+            <p
+              *ngIf="item.days == trItem.title && item.hours == hrItem.title"
+              [ngStyle]="{ background: item.selectStatusColor }"
+              draggable="true"
+              (dragstart)="onDragStart($event)"
+              (dragover)="onDragOver($event)"
+              (dragend)="onDragEnd($event, item)"
+            >
+              {{ item.todo.substring(0, 5) }}
+            </p>
+          </ng-container>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</table>
+<app-todo-week-modal
+  *ngIf="dialog.hideShowDialog"
+  [todoFiller]="dialog"
+></app-todo-week-modal>

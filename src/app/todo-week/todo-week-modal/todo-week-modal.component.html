@@ -1,0 +1,86 @@
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  [ngClass]="{ showmodal: todoFiller.hideShowDialog }"
+>
+  <div
+    class="modal-dialog"
+    id="modalstyle"
+    class="modal-dialog"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          {{ todoFiller.clickDay }} - {{ todoFiller.clickHour }}
+          <!-- აქ მოდალის ფანჯარაში მომაქვს დაკლიკებული უჯრის დღე და საათი -->
+        </h5>
+      </div>
+      <div class="modal-body d-flex">
+        <input
+          type="text"
+          class="form-control w-75"
+          placeholder="Enter ToDo"
+          [(ngModel)]="todoItem.todo"
+        />
+        <div class="w-25">
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            [(ngModel)]="todoItem.selectStatusColor"
+            [ngStyle]="{ backgroundColor: todoItem.selectStatusColor }"
+          >
+            <!-- ამ select ში მიწერია რომ:
+            ngModel -ით ვანიჭებ ჩვენს ts ის მხარეს არსებულ  todoItem ობიექტში
+            selectStatusColor სელექტის value ეს, მისი value კი ქვემოთ მაქვს 
+            განმარტებული option ებში. მისი მნიშვნელობები იდიაში არის ფერების
+            დასახელება: blue, yellow, green
+            შესაბამისად მაგას ვიყენებ ngStyle შიც,ფერის მისანიჭებლად.
+
+           -->
+            <option *ngFor="let item of statusInfo" [value]="item.statusColor">
+              {{ item.statusSelector }}
+            </option>
+            <!-- ამ option ში ეხლა მე დავწერე ესეთი რამ:
+              გადავყევი statusInfo მასივს. ოფშენებად გამოვიტანე
+              item.statusSelector -ები ხოლო თითოეული მათგანისთვის
+              განვუმარტე რომ value იქნება item.statusColor თქო.
+              ანუ იუზერის მხარეს მე როცა ავირჩევ მაგალითად InProgress
+              იდიაშეი მე მექნება yellow,როგორც InProgress ის მნიშვნელობა.
+             -->
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="closebtn"
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+          (click)="closeDialog()"
+        >
+          Close
+        </button>
+        <button
+          id="savebtn"
+          type="button"
+          class="btn btn-primary"
+          (click)="saveChangeDialogBtn()"
+        >
+          Save
+        </button>
+        <button
+          *ngIf="this.todoItem.days != undefined"
+          type="button"
+          class="btn btn-danger"
+          (click)="deleteTodoBtn()"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
